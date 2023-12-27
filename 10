@@ -1,0 +1,142 @@
+# ТЕМА 10. ФУНКЦИИ PLPGSQL
+
+### Введение в PL/pgSQL
+
+PL/pgSQL - это язык программирования, который используется в PostgreSQL для создания хранимых процедур, триггеров и функций. Вот простой пример PL/pgSQL-функции:
+
+```sql
+-- Создание функции
+CREATE OR REPLACE FUNCTION greet(name text) RETURNS text AS $$
+BEGIN
+  RETURN 'Привет, ' || name || '!';
+END;
+$$ LANGUAGE plpgsql;
+
+-- Вызов функции
+SELECT greet('Петя');
+```
+
+### Возврат и присвоение
+
+Примеры операций возврата и присвоения значений переменным:
+
+```sql
+-- Присвоение переменной значения
+DECLARE
+  my_variable text;
+BEGIN
+  my_variable := 'Значение';
+  -- Возврат значения
+  RETURN my_variable;
+END;
+
+-- Вызов функции и получение результата
+SELECT my_function();
+```
+
+### Декларация переменных в SQL
+
+Пример декларации переменных в SQL:
+
+```sql
+-- Декларация переменных
+DECLARE
+  var1 INT;
+  var2 TEXT;
+BEGIN
+  -- Присвоение значений переменным
+  var1 := 10;
+  var2 := 'Пример';
+  -- Использование переменных
+  -- ...
+END;
+```
+
+### Логика с if else
+
+Использование условных операторов `IF` и `ELSE`:
+
+```sql
+-- Пример условного оператора
+DECLARE
+  x INT := 5;
+BEGIN
+  IF x > 0 THEN
+    -- Действие при выполнении условия
+    RAISE NOTICE 'x положительное число';
+  ELSE
+    -- Действие при не выполнении условия
+    RAISE NOTICE 'x не положительное число';
+  END IF;
+END;
+```
+
+### Циклы в PL/pgSQL
+
+Использование циклов `FOR` в PL/pgSQL:
+
+```sql
+-- Пример цикла FOR
+DECLARE
+  i INT;
+BEGIN
+  FOR i IN 1..5 LOOP
+    -- Действие в цикле
+    RAISE NOTICE 'Итерация %', i;
+  END LOOP;
+END;
+```
+
+### RETURN NEXT
+
+Использование `RETURN NEXT` для возврата набора записей:
+
+```sql
+-- Пример использования RETURN NEXT
+CREATE OR REPLACE FUNCTION get_employees() RETURNS SETOF employees AS $$
+DECLARE
+  emp_record employees%ROWTYPE;
+BEGIN
+  FOR emp_record IN (SELECT * FROM employees) LOOP
+    -- Возврат записи
+    RETURN NEXT emp_record;
+  END LOOP;
+  RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Вызов функции для получения набора записей
+SELECT * FROM get_employees();
+```
+
+### Код для добавления столбца и обновления данных:
+
+```sql
+-- Добавление столбца "salary" в таблицу "employees"
+ALTER TABLE employees
+ADD COLUMN salary numeric(12,2);
+
+-- Обновление данных
+UPDATE employees
+SET salary=64.47 WHERE employee_id=1;
+UPDATE employees
+SET salary=52.42 WHERE employee_id=2;
+UPDATE employees
+SET salary=78.47 WHERE employee_id=3;
+UPDATE employees
+SET salary=62.95 WHERE employee_id=4;
+UPDATE employees
+SET salary=55.56 WHERE employee_id=5;
+UPDATE employees
+SET salary=54.92 WHERE employee_id=6;
+UPDATE employees
+SET salary=64.35 WHERE employee_id=7;
+UPDATE employees
+SET salary=75.60 WHERE employee_id=8;
+UPDATE employees
+SET salary=0.00 WHERE employee_id=9;
+
+-- Выборка данных
+SELECT employee_id, salary FROM employees
+ORDER BY employee_id;
+```
